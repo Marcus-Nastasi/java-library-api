@@ -16,6 +16,14 @@ public class Librarian {
     @Column
     private String password;
 
+    public Librarian() {}
+
+    public Librarian(String name, String cpf, String password) {
+        this.name = name;
+        this.cpf = cpf;
+        this.password = password;
+    }
+
     public String getId() {
         return id;
     }
