@@ -7,10 +7,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigInteger;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/members")
@@ -19,11 +19,40 @@ public class MembersController {
     @Autowired
     private MembersRepo membersRepo;
 
-    @PostMapping(value = "/new")
+    @GetMapping(value = "/get/")
+    public ResponseEntity<List<Member>> getAll() {
+        return ResponseEntity.ok(membersRepo.findAll());
+    }
+
+    @GetMapping(value = "/get/{id}/")
+    public ResponseEntity<Member> getSingle(@PathVariable BigInteger id) {
+        return ResponseEntity.ok(membersRepo.findById(id).orElseThrow());
+    }
+
+    @PostMapping(value = "/new/")
     public ResponseEntity<String> addNewMember(@RequestBody @Valid NewMemberDTO data) {
         Member m = new Member(data.name(), data.cpf(), data.type(), data.booksIssued(), data.booksLimit(), data.phone());
         membersRepo.save(m);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping(value = "/update/{id}/")
+    public ResponseEntity<String> update(@PathVariable BigInteger id , @RequestBody @Valid NewMemberDTO data) {
+        Member m = membersRepo.findById(id).orElseThrow();
+        m.setName(data.name());
+        m.setCpf(data.cpf());
+        m.setBooksIssued(data.booksIssued());
+        m.setType(data.type());
+        m.setBooksLimit(data.booksLimit());
+        m.setPhone(data.phone());
+        membersRepo.save(m);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping(value = "/delete/{id}/")
+    public ResponseEntity<String> del(@PathVariable BigInteger id) {
+        membersRepo.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }
 
