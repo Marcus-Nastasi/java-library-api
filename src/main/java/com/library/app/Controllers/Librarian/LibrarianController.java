@@ -26,6 +26,11 @@ public class LibrarianController {
         return ResponseEntity.ok(librarianRepo.findAll());
     }
 
+    @GetMapping(value = "/get/{id}/")
+    public ResponseEntity<Librarian> getSingle(@PathVariable String id) {
+        return ResponseEntity.ok(librarianRepo.findById(id).orElseThrow());
+    }
+
     @PostMapping(value = "/add/")
     public ResponseEntity<String> add(@RequestBody @Valid AddLibrarianDTO data) {
         String passEncoded = passwordEncoder.encode(data.password());
