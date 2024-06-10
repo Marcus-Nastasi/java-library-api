@@ -33,7 +33,24 @@ public class LibrarianController {
         librarianRepo.save(l);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PutMapping(value = "/update/{id}/")
+    public ResponseEntity<String> update(@RequestBody @Valid AddLibrarianDTO data, @PathVariable String id) {
+        Librarian l = librarianRepo.findById(id).orElseThrow();
+        l.setName(data.name());
+        l.setCpf(data.cpf());
+        l.setPassword(passwordEncoder.encode(data.password()));
+        librarianRepo.save(l);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping(value = "/delete/{id}/")
+    public ResponseEntity<String> del(@PathVariable String id) {
+        librarianRepo.deleteById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
 }
+
 
 
 
