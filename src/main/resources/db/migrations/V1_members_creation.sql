@@ -1,12 +1,12 @@
 
 CREATE TABLE members(
-    id BIGINT NOT NULL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     cpf VARCHAR(255) NOT NULL UNIQUE,
     type VARCHAR(255) NOT NULL,
-    dateOfMembership DATE NOT NULL,
-    booksIssued INT NOT NULL,
-    booksLimit INT NOT NULL,
+    date_of_membership DATE NOT NULL,
+    books_issued INT NOT NULL,
+    books_limit INT NOT NULL,
     phone VARCHAR(255) NOT NULL
 );
 

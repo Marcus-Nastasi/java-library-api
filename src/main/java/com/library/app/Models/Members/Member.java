@@ -1,5 +1,6 @@
 package com.library.app.Models.Members;
 
+import com.library.app.Enums.Members.MemberType;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
@@ -17,15 +18,28 @@ public class Member {
     @Column
     private String cpf;
     @Column
-    private String type;
-    @Column
+    @Enumerated(value = EnumType.ORDINAL)
+    private MemberType type;
+    @Column(name = "date_of_membership")
     private LocalDate dateOfMembership;
-    @Column
+    @Column(name = "books_issued")
     private int booksIssued;
-    @Column
+    @Column(name = "books_limit")
     private int booksLimit;
     @Column
     private String phone;
+
+    public Member() {}
+
+    public Member(String name, String cpf, MemberType type, int booksIssued, int booksLimit, String phone) {
+        this.name = name;
+        this.cpf = cpf;
+        this.type = type;
+        this.dateOfMembership = LocalDate.now();
+        this.booksIssued = booksIssued;
+        this.booksLimit = booksLimit;
+        this.phone = phone;
+    }
 
     public BigInteger getId() {
         return id;
@@ -51,11 +65,11 @@ public class Member {
         this.cpf = cpf;
     }
 
-    public String getType() {
+    public MemberType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(MemberType type) {
         this.type = type;
     }
 
