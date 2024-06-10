@@ -6,7 +6,7 @@ CREATE TABLE rents(
     librarianId VARCHAR(255) NOT NULL,
     memberId BIGINT NOT NULL,
     FOREIGN KEY (memberId) REFERENCES members(id),
-    FOREIGN KEY (librarianId) REFERENCES librarian(id)
+    FOREIGN KEY (librarianId) REFERENCES librarians(id)
 );
 
 
