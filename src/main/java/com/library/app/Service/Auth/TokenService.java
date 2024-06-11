@@ -19,17 +19,15 @@ public class TokenService {
     @Value("${spring.security.token.secret}")
     private String secret;
 
-    @Bean
-    public String generate(Librarian librarian) {
+    public String generate(String cpf) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.create().withIssuer("library-api").withSubject(librarian.getCpf()).withExpiresAt(exp()).sign(algorithm);
+            return JWT.create().withIssuer("library-api").withSubject(cpf).withExpiresAt(exp()).sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    @Bean
     public String validate(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -40,7 +38,7 @@ public class TokenService {
     }
 
     private Instant exp() {
-        return LocalDateTime.now().toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(12).toInstant(ZoneOffset.of("-03:00"));
     }
 }
 
