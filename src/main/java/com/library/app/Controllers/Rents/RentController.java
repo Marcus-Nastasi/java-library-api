@@ -45,6 +45,12 @@ public class RentController {
         rentsRepo.save(r);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @DeleteMapping(value = "/delete/{id}/")
+    public ResponseEntity<String> delete(@PathVariable BigInteger id) {
+        rentsRepo.deleteById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
 }
 
 
