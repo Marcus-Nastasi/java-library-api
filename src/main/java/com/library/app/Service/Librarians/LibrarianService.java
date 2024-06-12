@@ -23,6 +23,10 @@ public class LibrarianService {
 
     // to-do: librarian will add rents and updating book status
 
+    // add rents
+    public void addRent() {
+
+    }
 }
 
 
