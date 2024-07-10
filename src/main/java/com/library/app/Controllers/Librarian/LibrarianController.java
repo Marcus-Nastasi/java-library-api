@@ -3,6 +3,7 @@ package com.library.app.Controllers.Librarian;
 import com.library.app.DTOs.Librarian.AddLibrarianDTO;
 import com.library.app.Models.Librarian.Librarian;
 import com.library.app.Repository.Librarian.LibrarianRepo;
+import com.library.app.Service.Librarians.LibrarianService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ public class LibrarianController {
     private LibrarianRepo librarianRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LibrarianService librarianService;
 
     @GetMapping(value = "/get/")
     public ResponseEntity<List<Librarian>> getAll() {
@@ -32,21 +35,13 @@ public class LibrarianController {
     }
 
     @PostMapping(value = "/add/")
-    public ResponseEntity<String> add(@RequestBody @Valid AddLibrarianDTO data) {
-        String passEncoded = passwordEncoder.encode(data.password());
-        Librarian l = new Librarian(data.name(), data.cpf(), passEncoded);
-        librarianRepo.save(l);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Librarian> add(@RequestBody @Valid AddLibrarianDTO data) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(librarianService.addNewLibrarian(data));
     }
 
     @PutMapping(value = "/update/{id}/")
-    public ResponseEntity<String> update(@RequestBody @Valid AddLibrarianDTO data, @PathVariable String id) {
-        Librarian l = librarianRepo.findById(id).orElseThrow();
-        l.setName(data.name());
-        l.setCpf(data.cpf());
-        l.setPassword(passwordEncoder.encode(data.password()));
-        librarianRepo.save(l);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Librarian> update(@RequestBody @Valid AddLibrarianDTO data, @PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(librarianService.updateLibrarian(data, id));
     }
 
     @DeleteMapping(value = "/delete/{id}/")
