@@ -1,8 +1,10 @@
 package com.library.app.Service.Librarians;
 
 import com.library.app.DTOs.Librarian.AddLibrarianDTO;
+import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
 import com.library.app.Models.Librarian.Librarian;
 import com.library.app.Repository.Librarian.LibrarianRepo;
+import com.library.app.Service.Auth.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ public class LibrarianService {
     @Autowired
     private LibrarianRepo librarianRepo;
     @Autowired
+    private TokenService tokenService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public Librarian addNewLibrarian(AddLibrarianDTO data) {
@@ -22,13 +26,25 @@ public class LibrarianService {
         return l;
     }
 
-    public Librarian updateLibrarian(AddLibrarianDTO data, String id) {
+    public Librarian updateLibrarian(UpdLibrarianDTO data, String id, String token) throws RuntimeException {
         Librarian l = librarianRepo.findById(id).orElseThrow();
+
+        if (!tokenService.validate(token).equals(l.getCpf())) return null;
+        if (!passwordEncoder.matches(data.oldPassword(), l.getPassword())) return null;
+
         l.setName(data.name());
         l.setCpf(data.cpf());
-        l.setPassword(passwordEncoder.encode(data.password()));
+        l.setPassword(passwordEncoder.encode(data.newPassword()));
         librarianRepo.save(l);
+
         return l;
+    }
+
+    public String deleteLibrarian(String id, String token) {
+        Librarian l = librarianRepo.findById(id).orElseThrow();
+        if (!tokenService.validate(token).equals(l.getCpf())) return null;
+        librarianRepo.deleteById(id);
+        return "ok";
     }
 }
 

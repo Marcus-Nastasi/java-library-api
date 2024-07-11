@@ -1,6 +1,7 @@
 package com.library.app.Controllers.Librarian;
 
 import com.library.app.DTOs.Librarian.AddLibrarianDTO;
+import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
 import com.library.app.Models.Librarian.Librarian;
 import com.library.app.Repository.Librarian.LibrarianRepo;
 import com.library.app.Service.Librarians.LibrarianService;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/librarian")
@@ -40,13 +42,21 @@ public class LibrarianController {
     }
 
     @PutMapping(value = "/update/{id}/")
-    public ResponseEntity<Librarian> update(@RequestBody @Valid AddLibrarianDTO data, @PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(librarianService.updateLibrarian(data, id));
+    public ResponseEntity<Librarian> update(@RequestBody @Valid UpdLibrarianDTO data, @PathVariable String id, @RequestHeader Map<String, String> header) {
+        String token = header.get("Authorization").replace("Bearer ", "");
+        Librarian l = librarianService.updateLibrarian(data, id, token);
+
+        if (l == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(l);
     }
 
     @DeleteMapping(value = "/delete/{id}/")
-    public ResponseEntity<String> del(@PathVariable String id) {
-        librarianRepo.deleteById(id);
+    public ResponseEntity<String> del(@PathVariable String id, @RequestHeader Map<String, String> header) {
+        String token = header.get("Authorization").replace("Bearer ", "");
+
+        if (librarianService.deleteLibrarian(id, token) == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
