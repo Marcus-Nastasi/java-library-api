@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 
 @Configuration
@@ -25,11 +26,20 @@ public class SecurityConfig extends DelegatingWebMvcConfiguration {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(h ->
-                    h.requestMatchers(HttpMethod.POST, "/api/auth/login/").permitAll()
-                        .anyRequest().authenticated()
+                h.requestMatchers(HttpMethod.POST, "/api/auth/login/").permitAll()
+                    .anyRequest().authenticated()
             )
             .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
+    }
+
+    @Override
+    protected void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowCredentials(true)
+            .allowedHeaders("Authorization", "Content-Type")
+            .allowedMethods("GET", "POST", "PUT", "DELETE")
+            .allowedOrigins("http://192.168.0.76:3030");
     }
 }
 
