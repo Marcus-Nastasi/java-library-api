@@ -9,8 +9,5 @@ class AppApplicationTests {
 
 	@Test
 	void contextLoads() {
-		String oi = "oi";
-		Assertions.assertEquals("oi", oi);
 	}
-
 }
