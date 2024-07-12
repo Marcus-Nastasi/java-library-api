@@ -6,10 +6,12 @@ import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
 import com.library.app.Repository.Books.BooksRepo;
 import com.library.app.Service.Books.BookService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -51,6 +53,14 @@ public class BookServiceTests {
 
         assertDoesNotThrow(() -> {
             bookService.updateBook(BigInteger.valueOf(2455), newBookDTO);
+        });
+    }
+
+    @Test
+    void deleteBookTest() {
+        assertEquals("ok", bookService.deleteBook(BigInteger.valueOf(2500)));
+        assertDoesNotThrow(() -> {
+            bookService.deleteBook(BigInteger.valueOf(2500));
         });
     }
 }

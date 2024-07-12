@@ -33,6 +33,11 @@ public class BookService {
         booksRepo.save(b);
         return b;
     }
+
+    public String deleteBook(BigInteger id) {
+        booksRepo.deleteById(id);
+        return "ok";
+    }
 }
 
 
