@@ -46,7 +46,8 @@ public class MembersController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> del(@PathVariable BigInteger id) {
-        membersRepo.deleteById(id);
+        String deletion = membersService.deleteMember(id);
+        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body("member empty on this id");
         return ResponseEntity.accepted().build();
     }
 }

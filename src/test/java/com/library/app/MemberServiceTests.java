@@ -55,6 +55,23 @@ public class MemberServiceTests {
 
         verify(membersRepo, times(2)).save(m);
     }
+
+    @Test
+    void deleteMemberTest() {
+        Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
+
+        when(membersRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(m));
+        when(membersRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
+
+        assertDoesNotThrow(() -> {
+            membersService.deleteMember(BigInteger.valueOf(2500));
+        });
+
+        assertEquals("ok", membersService.deleteMember(BigInteger.valueOf(2500)));
+        assertNull(membersService.deleteMember(BigInteger.valueOf(2501)));
+
+        verify(membersRepo, times(2)).deleteById(any(BigInteger.class));
+    }
 }
 
 

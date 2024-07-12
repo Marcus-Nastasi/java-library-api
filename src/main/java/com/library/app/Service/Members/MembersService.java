@@ -31,6 +31,12 @@ public class MembersService {
         membersRepo.save(m);
         return m;
     }
+
+    public String deleteMember(BigInteger id) {
+        if (membersRepo.findById(id).isEmpty()) return null;
+        membersRepo.deleteById(id);
+        return "ok";
+    }
 }
 
 
