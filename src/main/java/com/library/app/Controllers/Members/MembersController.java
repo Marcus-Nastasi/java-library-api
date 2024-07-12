@@ -39,16 +39,9 @@ public class MembersController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> update(@PathVariable BigInteger id , @RequestBody @Valid NewMemberDTO data) {
-        Member m = membersRepo.findById(id).orElseThrow();
-        m.setName(data.name());
-        m.setCpf(data.cpf());
-        m.setBooksIssued(data.booksIssued());
-        m.setType(data.type());
-        m.setBooksLimit(data.booksLimit());
-        m.setPhone(data.phone());
-        membersRepo.save(m);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Member> update(@PathVariable BigInteger id , @RequestBody @Valid NewMemberDTO data) {
+        Member m = membersService.updateMember(id, data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(m);
     }
 
     @DeleteMapping(value = "/delete/{id}")

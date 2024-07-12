@@ -6,6 +6,8 @@ import com.library.app.Repository.Members.MembersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+
 @Service
 public class MembersService {
 
@@ -18,7 +20,17 @@ public class MembersService {
         return m;
     }
 
-    
+    public Member updateMember(BigInteger id, NewMemberDTO data) {
+        Member m = membersRepo.findById(id).orElseThrow();
+        m.setName(data.name());
+        m.setCpf(data.cpf());
+        m.setBooksIssued(data.booksIssued());
+        m.setType(data.type());
+        m.setBooksLimit(data.booksLimit());
+        m.setPhone(data.phone());
+        membersRepo.save(m);
+        return m;
+    }
 }
 
 

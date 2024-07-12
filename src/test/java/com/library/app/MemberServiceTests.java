@@ -12,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigInteger;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -34,6 +37,23 @@ public class MemberServiceTests {
         assertDoesNotThrow(() -> {
             membersService.addNewMember(newMemberDTO);
         });
+    }
+
+    @Test
+    void updateMemberTest() {
+        Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
+        NewMemberDTO newMemberDTO = new NewMemberDTO("Name", "CPF", MemberType.REGULAR, "21323131321", 2, 2);
+
+        when(membersRepo.findById(any(BigInteger.class))).thenReturn(Optional.of(m));
+        when(membersRepo.save(any(Member.class))).thenReturn(m);
+
+        assertDoesNotThrow(() -> {
+            membersService.updateMember(BigInteger.valueOf(2), newMemberDTO);
+        });
+
+        assertEquals(m, membersService.updateMember(BigInteger.valueOf(2), newMemberDTO));
+
+        verify(membersRepo, times(2)).save(m);
     }
 }
 
