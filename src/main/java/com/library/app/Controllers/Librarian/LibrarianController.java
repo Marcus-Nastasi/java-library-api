@@ -26,22 +26,22 @@ public class LibrarianController {
     @Autowired
     private LibrarianService librarianService;
 
-    @GetMapping(value = "/get/")
+    @GetMapping(value = "/get")
     public ResponseEntity<List<Librarian>> getAll() {
         return ResponseEntity.ok(librarianRepo.findAll());
     }
 
-    @GetMapping(value = "/get/{id}/")
+    @GetMapping(value = "/get/{id}")
     public ResponseEntity<Librarian> getSingle(@PathVariable String id) {
         return ResponseEntity.ok(librarianRepo.findById(id).orElseThrow());
     }
 
-    @PostMapping(value = "/add/")
+    @PostMapping(value = "/add")
     public ResponseEntity<Librarian> add(@RequestBody @Valid AddLibrarianDTO data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(librarianService.addNewLibrarian(data));
     }
 
-    @PutMapping(value = "/update/{id}/")
+    @PutMapping(value = "/update/{id}")
     public ResponseEntity<Librarian> update(@RequestBody @Valid UpdLibrarianDTO data, @PathVariable String id, @RequestHeader Map<String, String> header) {
         String token = header.get("Authorization").replace("Bearer ", "");
         Librarian l = librarianService.updateLibrarian(data, id, token);
@@ -51,11 +51,13 @@ public class LibrarianController {
         return ResponseEntity.status(HttpStatus.CREATED).body(l);
     }
 
-    @DeleteMapping(value = "/delete/{id}/")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> del(@PathVariable String id, @RequestHeader Map<String, String> header) {
         String token = header.get("Authorization").replace("Bearer ", "");
 
         if (librarianService.deleteLibrarian(id, token) == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        librarianService.deleteLibrarian(id, token);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }

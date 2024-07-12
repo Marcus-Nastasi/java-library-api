@@ -3,6 +3,7 @@ package com.library.app.Controllers.Books;
 import com.library.app.DTOs.Books.NewBookDTO;
 import com.library.app.Models.Books.Book;
 import com.library.app.Repository.Books.BooksRepo;
+import com.library.app.Service.Books.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,25 +19,26 @@ public class BookController {
 
     @Autowired
     private BooksRepo booksRepo;
+    @Autowired
+    private BookService bookService;
 
-    @GetMapping(value = "/get/")
+    @GetMapping(value = "/get")
     public ResponseEntity<List<Book>> getAll() {
         return ResponseEntity.ok(booksRepo.findAll());
     }
 
-    @GetMapping(value = "/get/{id}/")
+    @GetMapping(value = "/get/{id}")
     public ResponseEntity<Book> getSingle(@PathVariable BigInteger id) {
         return ResponseEntity.ok(booksRepo.findById(id).orElseThrow());
     }
 
-    @PostMapping(value = "/add/")
-    public ResponseEntity<String> add(@RequestBody @Valid NewBookDTO data) {
-        Book b = new Book(data.author(), data.name(), data.price(), data.quantity(), data.status(), data.type(), data.edition(), data.dateOfPublish());
-        booksRepo.save(b);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @PostMapping(value = "/add")
+    public ResponseEntity<Book> add(@RequestBody @Valid NewBookDTO data) {
+        Book b = bookService.addNewBook(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
 
-    @PutMapping(value = "/update/{id}/")
+    @PutMapping(value = "/update/{id}")
     public ResponseEntity<String> update(@PathVariable BigInteger id, @RequestBody @Valid NewBookDTO data) {
         Book b = booksRepo.findById(id).orElseThrow();
         b.setAuthor(data.author());
@@ -51,7 +53,7 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping(value = "/delete/{id}/")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable BigInteger id) {
         booksRepo.deleteById(id);
         return ResponseEntity.accepted().build();
