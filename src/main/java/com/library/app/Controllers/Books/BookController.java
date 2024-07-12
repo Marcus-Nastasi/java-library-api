@@ -39,18 +39,9 @@ public class BookController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> update(@PathVariable BigInteger id, @RequestBody @Valid NewBookDTO data) {
-        Book b = booksRepo.findById(id).orElseThrow();
-        b.setAuthor(data.author());
-        b.setEdition(data.edition());
-        b.setName(data.name());
-        b.setPrice(data.price());
-        b.setQuantity(data.quantity());
-        b.setDateOfPublish(data.dateOfPublish());
-        b.setStatus(data.status());
-        b.setType(data.type());
-        booksRepo.save(b);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Book> update(@PathVariable BigInteger id, @RequestBody @Valid NewBookDTO data) {
+        Book b = bookService.updateBook(id, data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
 
     @DeleteMapping(value = "/delete/{id}")

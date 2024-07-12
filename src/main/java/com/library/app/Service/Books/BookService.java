@@ -6,6 +6,8 @@ import com.library.app.Repository.Books.BooksRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+
 @Service
 public class BookService {
 
@@ -14,6 +16,20 @@ public class BookService {
 
     public Book addNewBook(NewBookDTO data) {
         Book b = new Book(data.author(), data.name(), data.price(), data.quantity(), data.status(), data.type(), data.edition(), data.dateOfPublish());
+        booksRepo.save(b);
+        return b;
+    }
+
+    public Book updateBook(BigInteger id, NewBookDTO data) {
+        Book b = booksRepo.findById(id).orElseThrow();
+        b.setAuthor(data.author());
+        b.setEdition(data.edition());
+        b.setName(data.name());
+        b.setPrice(data.price());
+        b.setQuantity(data.quantity());
+        b.setDateOfPublish(data.dateOfPublish());
+        b.setStatus(data.status());
+        b.setType(data.type());
         booksRepo.save(b);
         return b;
     }

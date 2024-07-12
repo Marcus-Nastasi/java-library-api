@@ -13,7 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,6 +38,19 @@ public class BookServiceTests {
 
         assertDoesNotThrow(() -> {
             bookService.addNewBook(newBookDTO);
+        });
+    }
+
+    @Test
+    void updateBookTest() {
+        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+        NewBookDTO newBookDTO = new NewBookDTO("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+
+        when(booksRepo.findById(any(BigInteger.class))).thenReturn(Optional.of(book));
+        when(booksRepo.save(any(Book.class))).thenReturn(book);
+
+        assertDoesNotThrow(() -> {
+            bookService.updateBook(BigInteger.valueOf(2455), newBookDTO);
         });
     }
 }
