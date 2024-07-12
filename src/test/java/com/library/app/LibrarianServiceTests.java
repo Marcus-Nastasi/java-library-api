@@ -64,10 +64,13 @@ public class LibrarianServiceTests {
 
         Mockito.when(tokenService.validate(Mockito.any(String.class))).thenReturn(librarian.getCpf());
         Mockito.when(librarianRepo.findById("1")).thenReturn(Optional.of(librarian));
+        Mockito.when(librarianRepo.findById("11")).thenReturn(Optional.empty());
 
         String result = librarianService.deleteLibrarian("1", tkn);
 
         Assertions.assertEquals("ok", result);
+        Assertions.assertNull(librarianService.deleteLibrarian("11", tkn));
+
         Mockito.verify(librarianRepo, Mockito.times(1)).deleteById("1");
     }
 }

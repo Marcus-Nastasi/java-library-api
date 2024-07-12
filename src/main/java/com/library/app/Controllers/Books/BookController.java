@@ -46,8 +46,8 @@ public class BookController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable BigInteger id) {
-        String deleted = bookService.deleteBook(id);
-        if (!deleted.equals("ok")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        String deletion = bookService.deleteBook(id);
+        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.accepted().build();
     }
 }

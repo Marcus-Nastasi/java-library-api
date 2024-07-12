@@ -35,6 +35,7 @@ public class BookService {
     }
 
     public String deleteBook(BigInteger id) {
+        if (booksRepo.findById(id).isEmpty()) return null;
         booksRepo.deleteById(id);
         return "ok";
     }

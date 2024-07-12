@@ -54,10 +54,9 @@ public class LibrarianController {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> del(@PathVariable String id, @RequestHeader Map<String, String> header) {
         String token = header.get("Authorization").replace("Bearer ", "");
+        String deletion = librarianService.deleteLibrarian(id, token);
 
-        if (librarianService.deleteLibrarian(id, token) == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
-        librarianService.deleteLibrarian(id, token);
+        if (deletion == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }

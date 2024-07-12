@@ -41,7 +41,8 @@ public class LibrarianService {
     }
 
     public String deleteLibrarian(String id, String token) {
-        Librarian l = librarianRepo.findById(id).orElseThrow();
+        if (librarianRepo.findById(id).isEmpty()) return null;
+        Librarian l = librarianRepo.findById(id).get();
         if (!tokenService.validate(token).equals(l.getCpf())) return null;
         librarianRepo.deleteById(id);
         return "ok";

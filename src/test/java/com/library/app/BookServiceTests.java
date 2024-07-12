@@ -56,11 +56,17 @@ public class BookServiceTests {
 
     @Test
     void deleteBookTest() {
-        assertEquals("ok", bookService.deleteBook(BigInteger.valueOf(2500)));
+        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+
+        when(booksRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(book));
+        when(booksRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> {
             bookService.deleteBook(BigInteger.valueOf(2500));
         });
+
+        assertEquals("ok", bookService.deleteBook(BigInteger.valueOf(2500)));
+        assertNull(bookService.deleteBook(BigInteger.valueOf(2501)));
 
         verify(booksRepo, times(2)).deleteById(BigInteger.valueOf(2500));
     }
