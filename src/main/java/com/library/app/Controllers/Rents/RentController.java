@@ -24,12 +24,14 @@ public class RentController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Rent>> getAll() {
+        if (rentsRepo.findAll().isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(rentsRepo.findAll());
     }
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<Rent> getSingle(@PathVariable BigInteger id) {
-        return ResponseEntity.ok(rentsRepo.findById(id).orElseThrow());
+        if (rentsRepo.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(rentsRepo.findById(id).get());
     }
 
     @PostMapping(value = "/new")

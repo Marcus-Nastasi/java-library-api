@@ -21,7 +21,10 @@ public class MembersService {
     }
 
     public Member updateMember(BigInteger id, NewMemberDTO data) {
+        if (membersRepo.findById(id).isEmpty()) return null;
+
         Member m = membersRepo.findById(id).orElseThrow();
+
         m.setName(data.name());
         m.setCpf(data.cpf());
         m.setBooksIssued(data.booksIssued());
@@ -29,6 +32,7 @@ public class MembersService {
         m.setBooksLimit(data.booksLimit());
         m.setPhone(data.phone());
         membersRepo.save(m);
+
         return m;
     }
 

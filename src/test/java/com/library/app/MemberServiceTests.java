@@ -42,16 +42,19 @@ public class MemberServiceTests {
         Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
         NewMemberDTO newMemberDTO = new NewMemberDTO("Name", "CPF", MemberType.REGULAR, "21323131321", 2, 2);
 
-        when(membersRepo.findById(any(BigInteger.class))).thenReturn(Optional.of(m));
+        when(membersRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(m));
+        when(membersRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
         when(membersRepo.save(any(Member.class))).thenReturn(m);
 
         assertDoesNotThrow(() -> {
-            membersService.updateMember(BigInteger.valueOf(2), newMemberDTO);
+            membersService.updateMember(BigInteger.valueOf(2500), newMemberDTO);
         });
 
-        assertEquals(m, membersService.updateMember(BigInteger.valueOf(2), newMemberDTO));
+        assertNotNull(membersService.updateMember(BigInteger.valueOf(2500), newMemberDTO));
+        assertNull(membersService.updateMember(BigInteger.valueOf(2501), newMemberDTO));
+        assertEquals(m, membersService.updateMember(BigInteger.valueOf(2500), newMemberDTO));
 
-        verify(membersRepo, times(2)).save(m);
+        verify(membersRepo, times(3)).save(m);
     }
 
     @Test
