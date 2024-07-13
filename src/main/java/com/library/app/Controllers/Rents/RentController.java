@@ -39,13 +39,10 @@ public class RentController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> update(@PathVariable BigInteger id, @RequestBody @Valid NewRentDTO data) {
-        Rent r = rentsRepo.findById(id).orElseThrow();
-        r.setBook_id(data.book_id());
-        r.setLibrarian_id(data.librarian_id());
-        r.setMember_id(data.member_id());
-        rentsRepo.save(r);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Rent> update(@PathVariable BigInteger id, @RequestBody @Valid NewRentDTO data) {
+        Rent r = rentsService.updateRent(id, data);
+        if (r == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(r);
     }
 
     @DeleteMapping(value = "/delete/{id}")

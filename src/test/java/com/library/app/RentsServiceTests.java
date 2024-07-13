@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,6 +34,23 @@ public class RentsServiceTests {
         assertDoesNotThrow(() -> {
             rentsService.addNewRent(newRentDTO);
         });
+    }
+
+    @Test
+    void updateRentTest() {
+        Rent r = new Rent(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
+        NewRentDTO newRentDTO = new NewRentDTO(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
+
+        when(rentsRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(r));
+        when(rentsRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
+        when(rentsRepo.save(any(Rent.class))).thenReturn(r);
+
+        assertDoesNotThrow(() -> {
+            rentsService.updateRent(BigInteger.valueOf(2500), newRentDTO);
+        });
+
+        assertNotNull(rentsService.updateRent(BigInteger.valueOf(2500), newRentDTO));
+        assertNull(rentsService.updateRent(BigInteger.valueOf(2501), newRentDTO));
     }
 }
 
