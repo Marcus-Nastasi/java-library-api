@@ -21,7 +21,10 @@ public class BookService {
     }
 
     public Book updateBook(BigInteger id, NewBookDTO data) {
+        if (booksRepo.findById(id).isEmpty()) return null;
+
         Book b = booksRepo.findById(id).orElseThrow();
+
         b.setAuthor(data.author());
         b.setEdition(data.edition());
         b.setName(data.name());
@@ -31,6 +34,7 @@ public class BookService {
         b.setStatus(data.status());
         b.setType(data.type());
         booksRepo.save(b);
+
         return b;
     }
 

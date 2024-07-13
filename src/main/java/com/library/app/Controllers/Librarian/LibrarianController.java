@@ -28,17 +28,20 @@ public class LibrarianController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Librarian>> getAll() {
+        if (librarianRepo.findAll().isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(librarianRepo.findAll());
     }
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<Librarian> getSingle(@PathVariable String id) {
-        return ResponseEntity.ok(librarianRepo.findById(id).orElseThrow());
+        if (librarianRepo.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(librarianRepo.findById(id).get());
     }
 
     @PostMapping(value = "/add")
     public ResponseEntity<Librarian> add(@RequestBody @Valid AddLibrarianDTO data) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(librarianService.addNewLibrarian(data));
+        Librarian l = librarianService.addNewLibrarian(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(l);
     }
 
     @PutMapping(value = "/update/{id}")

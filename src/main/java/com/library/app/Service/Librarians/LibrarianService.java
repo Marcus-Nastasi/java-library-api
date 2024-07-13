@@ -6,6 +6,9 @@ import com.library.app.Models.Librarian.Librarian;
 import com.library.app.Repository.Librarian.LibrarianRepo;
 import com.library.app.Service.Auth.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +25,16 @@ public class LibrarianService {
     public Librarian addNewLibrarian(AddLibrarianDTO data) {
         String passEncoded = passwordEncoder.encode(data.password());
         Librarian l = new Librarian(data.name(), data.cpf(), passEncoded);
+
         librarianRepo.save(l);
+
         return l;
     }
 
     public Librarian updateLibrarian(UpdLibrarianDTO data, String id, String token) throws RuntimeException {
-        Librarian l = librarianRepo.findById(id).orElseThrow();
+        if (librarianRepo.findById(id).isEmpty()) return null;
+
+        Librarian l = librarianRepo.findById(id).get();
 
         if (!tokenService.validate(token).equals(l.getCpf())) return null;
         if (!passwordEncoder.matches(data.oldPassword(), l.getPassword())) return null;
@@ -35,6 +42,7 @@ public class LibrarianService {
         l.setName(data.name());
         l.setCpf(data.cpf());
         l.setPassword(passwordEncoder.encode(data.newPassword()));
+
         librarianRepo.save(l);
 
         return l;
@@ -42,9 +50,13 @@ public class LibrarianService {
 
     public String deleteLibrarian(String id, String token) {
         if (librarianRepo.findById(id).isEmpty()) return null;
+
         Librarian l = librarianRepo.findById(id).get();
+
         if (!tokenService.validate(token).equals(l.getCpf())) return null;
+
         librarianRepo.deleteById(id);
+
         return "ok";
     }
 }

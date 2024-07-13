@@ -24,11 +24,13 @@ public class BookController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Book>> getAll() {
+        if (booksRepo.findAll().isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(booksRepo.findAll());
     }
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<Book> getSingle(@PathVariable BigInteger id) {
+        if (booksRepo.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(booksRepo.findById(id).orElseThrow());
     }
 
@@ -41,6 +43,7 @@ public class BookController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Book> update(@PathVariable BigInteger id, @RequestBody @Valid NewBookDTO data) {
         Book b = bookService.updateBook(id, data);
+        if (b == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
 
