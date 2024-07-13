@@ -1,4 +1,3 @@
-
 CREATE TABLE rents(
     id SERIAL PRIMARY KEY,
     book_id BIGINT NOT NULL,

@@ -27,14 +27,14 @@ public class MembersController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Member>> getAll() {
-        if (membersRepo.findAll().isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        return ResponseEntity.ok(membersRepo.findAll());
+        return (membersRepo.findAll().isEmpty())
+                ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.ok(membersRepo.findAll());
     }
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<Member> getSingle(@PathVariable BigInteger id) {
-        if (membersRepo.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        return ResponseEntity.ok(membersRepo.findById(id).get());
+        return (membersRepo.findById(id).isEmpty())
+                ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.ok(membersRepo.findById(id).get());
     }
 
     @PostMapping(value = "/new")
@@ -51,7 +51,9 @@ public class MembersController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Member> update(@PathVariable BigInteger id , @RequestBody @Valid NewMemberDTO data) {
         Member m = membersService.updateMember(id, data);
+
         if (m == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
         return ResponseEntity.status(HttpStatus.CREATED).body(m);
     }
 
