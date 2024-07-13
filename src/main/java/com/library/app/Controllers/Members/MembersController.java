@@ -42,7 +42,7 @@ public class MembersController {
         Member m = membersService.addNewMember(data);
 
         if (m == null) return ResponseEntity.status(HttpStatus.CONFLICT)
-                .header("Content-Type", "application/json")
+            .header("Content-Type", "application/json")
                 .body(gson.toJson("{\"data\": [\"error\": \"member already registered\"]}"));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(m));
@@ -58,7 +58,11 @@ public class MembersController {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> del(@PathVariable BigInteger id) {
         String deletion = membersService.deleteMember(id);
-        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body("member empty on this id");
+
+        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT)
+            .header("Content-Type", "application/json")
+                .body(gson.toJson("{\"data\": [\"error\": \"no member found\"]}"));
+
         return ResponseEntity.accepted().build();
     }
 }
