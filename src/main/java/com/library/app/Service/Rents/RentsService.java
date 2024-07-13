@@ -32,6 +32,12 @@ public class RentsService {
 
         return r;
     }
+
+    public String deleteRent(BigInteger id) {
+        if (rentsRepo.findById(id).isEmpty()) return null;
+        rentsRepo.deleteById(id);
+        return "ok";
+    }
 }
 
 

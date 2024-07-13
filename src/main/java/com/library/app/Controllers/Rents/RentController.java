@@ -47,7 +47,8 @@ public class RentController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable BigInteger id) {
-        rentsRepo.deleteById(id);
+        String deletion = rentsService.deleteRent(id);
+        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
