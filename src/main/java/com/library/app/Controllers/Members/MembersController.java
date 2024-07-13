@@ -1,5 +1,6 @@
 package com.library.app.Controllers.Members;
 
+import com.google.gson.Gson;
 import com.library.app.DTOs.Members.NewMemberDTO;
 import com.library.app.Models.Members.Member;
 import com.library.app.Repository.Members.MembersRepo;
@@ -21,6 +22,8 @@ public class MembersController {
     private MembersRepo membersRepo;
     @Autowired
     private MembersService membersService;
+    @Autowired
+    private Gson gson;
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Member>> getAll() {
@@ -35,9 +38,14 @@ public class MembersController {
     }
 
     @PostMapping(value = "/new")
-    public ResponseEntity<Member> addNewMember(@RequestBody @Valid NewMemberDTO data) {
+    public ResponseEntity<String> addNewMember(@RequestBody @Valid NewMemberDTO data) {
         Member m = membersService.addNewMember(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(m);
+
+        if (m == null) return ResponseEntity.status(HttpStatus.CONFLICT)
+                .header("Content-Type", "application/json")
+                .body(gson.toJson("{\"data\": [\"error\": \"member already registered\"]}"));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(m));
     }
 
     @PutMapping(value = "/update/{id}")

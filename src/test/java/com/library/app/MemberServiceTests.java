@@ -28,13 +28,22 @@ public class MemberServiceTests {
     @Test
     void addNewMemberTest() {
         Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
-        NewMemberDTO newMemberDTO = new NewMemberDTO("Name", "CPF", MemberType.REGULAR, "21323131321", 2, 2);
+        NewMemberDTO newMemberDTO = new NewMemberDTO("Name", "CPF", MemberType.REGULAR, "123213231", 2, 2);
+        NewMemberDTO newMemberDTONull = new NewMemberDTO("Name", "CPFNull", MemberType.REGULAR, "21323131321", 2, 2);
 
+        when(membersRepo.findByCpf(newMemberDTO.cpf())).thenReturn(null);
+        when(membersRepo.findByCpf(newMemberDTONull.cpf())).thenReturn(m);
         when(membersRepo.save(any(Member.class))).thenReturn(m);
 
         assertDoesNotThrow(() -> {
             membersService.addNewMember(newMemberDTO);
         });
+
+        assertEquals(m.getCpf(), membersService.addNewMember(newMemberDTO).getCpf());
+        assertNotNull(membersService.addNewMember(newMemberDTO));
+        assertNull(membersService.addNewMember(newMemberDTONull));
+
+        verify(membersRepo, times(3)).save(any(Member.class));
     }
 
     @Test

@@ -15,6 +15,8 @@ public class MembersService {
     private MembersRepo membersRepo;
 
     public Member addNewMember(NewMemberDTO data) {
+        if (membersRepo.findByCpf(data.cpf()) != null) return null;
+
         Member m = new Member(data.name(), data.cpf(), data.type(), data.booksIssued(), data.booksLimit(), data.phone());
 
         membersRepo.save(m);
