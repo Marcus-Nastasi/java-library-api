@@ -23,6 +23,8 @@ public class LibrarianService {
     private PasswordEncoder passwordEncoder;
 
     public Librarian addNewLibrarian(AddLibrarianDTO data) {
+        if (librarianRepo.findByCpf(data.cpf()) != null) return null;
+
         String passEncoded = passwordEncoder.encode(data.password());
         Librarian l = new Librarian(data.name(), data.cpf(), passEncoded);
 
@@ -48,12 +50,10 @@ public class LibrarianService {
         return l;
     }
 
-    public String deleteLibrarian(String id, String token) {
+    public String deleteLibrarian(String id) {
         if (librarianRepo.findById(id).isEmpty()) return null;
 
         Librarian l = librarianRepo.findById(id).get();
-
-        if (!tokenService.validate(token).equals(l.getCpf())) return null;
 
         librarianRepo.deleteById(id);
 

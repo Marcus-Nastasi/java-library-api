@@ -33,10 +33,16 @@ public class LibrarianServiceTests {
     void addNewTest() {
         Librarian librarian = new Librarian("name", "cpf", "password");
         AddLibrarianDTO addLibrarianDTO = new AddLibrarianDTO("name", "cpf", "password");
+        AddLibrarianDTO addLibrarianDTONull = new AddLibrarianDTO("name", "cpfNull", "password");
 
+        Mockito.when(librarianRepo.findByCpf(addLibrarianDTONull.cpf())).thenReturn(librarian);
+        Mockito.when(librarianRepo.findByCpf(addLibrarianDTO.cpf())).thenReturn(null);
         Mockito.when(librarianRepo.save(Mockito.any(Librarian.class))).thenReturn(librarian);
 
         Assertions.assertNotNull(librarianService.addNewLibrarian(addLibrarianDTO));
+        Assertions.assertNull(librarianService.addNewLibrarian(addLibrarianDTONull));
+
+        Mockito.verify(librarianRepo, Mockito.times(1)).save(Mockito.any(Librarian.class));
     }
 
     @Test
@@ -58,16 +64,14 @@ public class LibrarianServiceTests {
     @Test
     void deleteLibrarian() {
         Librarian librarian = new Librarian("name", "cpf", "password");
-        String tkn = "token";
 
-        Mockito.when(tokenService.validate(Mockito.any(String.class))).thenReturn(librarian.getCpf());
         Mockito.when(librarianRepo.findById("1")).thenReturn(Optional.of(librarian));
         Mockito.when(librarianRepo.findById("11")).thenReturn(Optional.empty());
 
-        String result = librarianService.deleteLibrarian("1", tkn);
+        String result = librarianService.deleteLibrarian("1");
 
         Assertions.assertEquals("ok", result);
-        Assertions.assertNull(librarianService.deleteLibrarian("11", tkn));
+        Assertions.assertNull(librarianService.deleteLibrarian("11"));
 
         Mockito.verify(librarianRepo, Mockito.times(1)).deleteById("1");
     }

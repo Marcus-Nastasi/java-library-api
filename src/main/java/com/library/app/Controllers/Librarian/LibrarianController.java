@@ -1,5 +1,6 @@
 package com.library.app.Controllers.Librarian;
 
+import com.google.gson.Gson;
 import com.library.app.DTOs.Librarian.AddLibrarianDTO;
 import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
 import com.library.app.Models.Librarian.Librarian;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,8 @@ public class LibrarianController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private LibrarianService librarianService;
+    @Autowired
+    private Gson gson;
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Librarian>> getAll() {
@@ -39,14 +43,19 @@ public class LibrarianController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<Librarian> add(@RequestBody @Valid AddLibrarianDTO data) {
+    public ResponseEntity<String> add(@RequestBody @Valid AddLibrarianDTO data) {
         Librarian l = librarianService.addNewLibrarian(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(l);
+
+        if (l == null) return ResponseEntity.status(HttpStatus.CONFLICT)
+            .header("Content-Type", "application/json")
+                .body(gson.toJson("{\"data\": [\"error\": \"librarian already registered\"]}"));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(l));
     }
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Librarian> update(@RequestBody @Valid UpdLibrarianDTO data, @PathVariable String id, @RequestHeader Map<String, String> header) {
-        String token = header.get("Authorization").replace("Bearer ", "");
+        String token = header.get("authorization").replace("Bearer ", "");
         Librarian l = librarianService.updateLibrarian(data, id, token);
 
         if (l == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -55,9 +64,8 @@ public class LibrarianController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> del(@PathVariable String id, @RequestHeader Map<String, String> header) {
-        String token = header.get("Authorization").replace("Bearer ", "");
-        String deletion = librarianService.deleteLibrarian(id, token);
+    public ResponseEntity<String> del(@PathVariable String id) {
+        String deletion = librarianService.deleteLibrarian(id);
 
         if (deletion == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
