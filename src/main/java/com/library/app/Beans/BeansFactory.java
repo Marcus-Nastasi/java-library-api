@@ -1,5 +1,7 @@
 package com.library.app.Beans;
 
+import com.google.gson.Gson;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +15,11 @@ public class BeansFactory {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public Gson gson() {
+        return new Gson();
     }
 
     @Bean

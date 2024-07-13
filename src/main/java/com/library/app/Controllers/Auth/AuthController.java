@@ -1,5 +1,6 @@
 package com.library.app.Controllers.Auth;
 
+import com.google.gson.Gson;
 import com.library.app.DTOs.Auth.LoginDTO;
 import com.library.app.Repository.Librarian.LibrarianRepo;
 import com.library.app.Service.Auth.TokenService;
@@ -24,6 +25,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private Gson gson;
 
     @PostMapping(value = "/login/")
     public ResponseEntity<String> login(@RequestBody @Valid LoginDTO data) {
@@ -31,9 +34,12 @@ public class AuthController {
         var auth = authenticationManager.authenticate(usernamePass);
         UserDetails u = librarianRepo.findByCpf(data.cpf());
 
-        return( passwordEncoder.matches(data.password(), u.getPassword()) ?
-            ResponseEntity.accepted().body(tokenService.generate(u.getUsername())) :
-            ResponseEntity.badRequest().build()
+        String passwordOrCpfWrong = gson.toJson("\"data\": [ \"error\": \"cpf or password wrong\" ]");
+
+        return(
+            passwordEncoder.matches(data.password(), u.getPassword())
+                ? ResponseEntity.accepted().body(tokenService.generate(u.getUsername()))
+                    : ResponseEntity.badRequest().body(passwordOrCpfWrong)
         );
     }
 }
