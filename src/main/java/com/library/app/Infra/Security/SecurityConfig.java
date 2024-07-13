@@ -26,7 +26,10 @@ public class SecurityConfig extends DelegatingWebMvcConfiguration {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(h ->
-                h.requestMatchers(HttpMethod.POST, "/api/auth/login/").permitAll()
+                h.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/librarian/get").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/librarian/get/{id}").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/librarian/delete/{id}").hasRole("ADMIN")
                     .anyRequest().authenticated()
             )
             .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)

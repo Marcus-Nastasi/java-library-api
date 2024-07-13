@@ -16,7 +16,9 @@ public class BookService {
 
     public Book addNewBook(NewBookDTO data) {
         Book b = new Book(data.author(), data.name(), data.price(), data.quantity(), data.status(), data.type(), data.edition(), data.dateOfPublish());
+
         booksRepo.save(b);
+
         return b;
     }
 
@@ -33,6 +35,7 @@ public class BookService {
         b.setDateOfPublish(data.dateOfPublish());
         b.setStatus(data.status());
         b.setType(data.type());
+
         booksRepo.save(b);
 
         return b;
@@ -40,7 +43,9 @@ public class BookService {
 
     public String deleteBook(BigInteger id) {
         if (booksRepo.findById(id).isEmpty()) return null;
+
         booksRepo.deleteById(id);
+
         return "ok";
     }
 }

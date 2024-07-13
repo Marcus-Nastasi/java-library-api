@@ -16,7 +16,9 @@ public class RentsService {
 
     public Rent addNewRent(NewRentDTO data) {
         Rent r = new Rent(data.book_id(), data.librarian_id(), data.member_id());
+
         rentsRepo.save(r);
+
         return r;
     }
 
@@ -28,6 +30,7 @@ public class RentsService {
         r.setBook_id(data.book_id());
         r.setLibrarian_id(data.librarian_id());
         r.setMember_id(data.member_id());
+
         rentsRepo.save(r);
 
         return r;
@@ -35,7 +38,9 @@ public class RentsService {
 
     public String deleteRent(BigInteger id) {
         if (rentsRepo.findById(id).isEmpty()) return null;
+
         rentsRepo.deleteById(id);
+
         return "ok";
     }
 }

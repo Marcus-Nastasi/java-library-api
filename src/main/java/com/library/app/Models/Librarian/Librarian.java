@@ -1,10 +1,13 @@
 package com.library.app.Models.Librarian;
 
+import com.library.app.Enums.Librarians.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "librarians")
@@ -19,6 +22,9 @@ public class Librarian implements UserDetails {
     private String cpf;
     @Column
     private String password;
+    @Column
+    @Enumerated(EnumType.ORDINAL)
+    private UserRole role;
 
     public Librarian() {}
 
@@ -26,11 +32,15 @@ public class Librarian implements UserDetails {
         this.name = name;
         this.cpf = cpf;
         this.password = password;
+        this.role = UserRole.USER;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if (this.role == UserRole.ADMIN) return List.of(
+                new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER")
+        );
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -88,6 +98,14 @@ public class Librarian implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }
 

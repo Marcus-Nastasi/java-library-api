@@ -16,7 +16,9 @@ public class MembersService {
 
     public Member addNewMember(NewMemberDTO data) {
         Member m = new Member(data.name(), data.cpf(), data.type(), data.booksIssued(), data.booksLimit(), data.phone());
+
         membersRepo.save(m);
+
         return m;
     }
 
@@ -31,6 +33,7 @@ public class MembersService {
         m.setType(data.type());
         m.setBooksLimit(data.booksLimit());
         m.setPhone(data.phone());
+
         membersRepo.save(m);
 
         return m;
@@ -38,7 +41,9 @@ public class MembersService {
 
     public String deleteMember(BigInteger id) {
         if (membersRepo.findById(id).isEmpty()) return null;
+
         membersRepo.deleteById(id);
+
         return "ok";
     }
 }

@@ -28,13 +28,13 @@ public class AuthController {
     @Autowired
     private Gson gson;
 
-    @PostMapping(value = "/login/")
+    @PostMapping(value = "/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginDTO data) {
         var usernamePass = new UsernamePasswordAuthenticationToken(data.cpf(), data.password());
         var auth = authenticationManager.authenticate(usernamePass);
         UserDetails u = librarianRepo.findByCpf(data.cpf());
 
-        String passwordOrCpfWrong = gson.toJson("\"data\": [ \"error\": \"cpf or password wrong\" ]");
+        String passwordOrCpfWrong = gson.toJson("{\"data\": [ \"error\": \"cpf or password wrong\" ]}");
 
         return(
             passwordEncoder.matches(data.password(), u.getPassword())
