@@ -29,7 +29,7 @@ public class BookServiceTests {
 
     @Test
     void newBookTest() {
-        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+        Book book = new Book("Author", "Name", 12.99, 1, "imgUrl", BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
         NewBookDTO newBookDTO = new NewBookDTO("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
 
         when(booksRepo.save(any(Book.class))).thenReturn(book);

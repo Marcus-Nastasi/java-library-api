@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +41,8 @@ public class LibrarianController {
         return ResponseEntity.ok(librarianRepo.findById(id).get());
     }
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<String> add(@RequestBody @Valid AddLibrarianDTO data) {
+    @PostMapping(value = "/register")
+    public ResponseEntity<String> register(@RequestBody @Valid AddLibrarianDTO data) {
         Librarian l = librarianService.addNewLibrarian(data);
 
         if (l == null) return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -64,7 +63,7 @@ public class LibrarianController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> del(@PathVariable String id) {
+    public ResponseEntity<String> delete(@PathVariable String id) {
         String deletion = librarianService.deleteLibrarian(id);
 
         if (deletion == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

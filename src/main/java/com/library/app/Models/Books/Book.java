@@ -23,6 +23,8 @@ public class Book {
     @Column
     private int quantity;
     @Column
+    private String image_url;
+    @Column
     private BookStatus status;
     @Column
     private BookType type;
@@ -33,11 +35,12 @@ public class Book {
 
     public Book() {}
 
-    public Book(String author, String name, double price, int quantity, BookStatus status, BookType type, String edition, LocalDate dateOfPublish) {
+    public Book(String author, String name, double price, int quantity, String image_url, BookStatus status, BookType type, String edition, LocalDate dateOfPublish) {
         this.author = author;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.image_url = image_url;
         this.status = status;
         this.type = type;
         this.edition = edition;
@@ -82,6 +85,14 @@ public class Book {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     public BookStatus getStatus() {

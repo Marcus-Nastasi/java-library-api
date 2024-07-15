@@ -1,6 +1,8 @@
 package com.library.app.Controllers.Books;
 
 import com.library.app.DTOs.Books.NewBookDTO;
+import com.library.app.Enums.Books.BookStatus;
+import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
 import com.library.app.Repository.Books.BooksRepo;
 import com.library.app.Service.Books.BookService;
@@ -9,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,7 +39,16 @@ public class BookController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<Book> add(@RequestBody @Valid NewBookDTO data) {
+    public ResponseEntity<Book> add(@RequestParam("author") String author,
+                                    @RequestParam("name") String name,
+                                    @RequestParam("price") double price,
+                                    @RequestParam("quantity") int quantity,
+                                    @RequestParam("status") BookStatus status,
+                                    @RequestParam("type") BookType type,
+                                    @RequestParam("edition") String edition,
+                                    @RequestParam("dateOfPublish") LocalDate dateOfPublish,
+                                    @RequestParam("image") MultipartFile image) {
+        NewBookDTO data = new NewBookDTO(author, name, price, quantity, status, type, edition, dateOfPublish, image);
         Book b = bookService.addNewBook(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
