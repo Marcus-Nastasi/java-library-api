@@ -1,6 +1,9 @@
 package com.library.app.Controllers.Books;
 
+import com.google.gson.Gson;
 import com.library.app.DTOs.Books.NewBookDTO;
+import com.library.app.DTOs.Books.UpdateBookDTO;
+import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
 import com.library.app.Enums.Books.BookStatus;
 import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
@@ -25,6 +28,8 @@ public class BookController {
     private BooksRepo booksRepo;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private Gson gson;
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Book>> getAll() {
@@ -50,11 +55,14 @@ public class BookController {
                                     @RequestParam("image") MultipartFile image) {
         NewBookDTO data = new NewBookDTO(author, name, price, quantity, status, type, edition, dateOfPublish, image);
         Book b = bookService.addNewBook(data);
+
+        if (b == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<Book> update(@PathVariable BigInteger id, @RequestBody @Valid NewBookDTO data) {
+    public ResponseEntity<Book> update(@PathVariable BigInteger id, @RequestBody @Valid UpdateBookDTO data) {
         Book b = bookService.updateBook(id, data);
         if (b == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(b);

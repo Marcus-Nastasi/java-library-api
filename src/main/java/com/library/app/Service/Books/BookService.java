@@ -2,6 +2,7 @@ package com.library.app.Service.Books;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.library.app.DTOs.Books.NewBookDTO;
+import com.library.app.DTOs.Books.UpdateBookDTO;
 import com.library.app.Models.Books.Book;
 import com.library.app.Repository.Books.BooksRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class BookService {
         return b;
     }
 
-    public Book updateBook(BigInteger id, NewBookDTO data) {
+    public Book updateBook(BigInteger id, UpdateBookDTO data) {
         if (booksRepo.findById(id).isEmpty()) return null;
 
         Book b = booksRepo.findById(id).orElseThrow();

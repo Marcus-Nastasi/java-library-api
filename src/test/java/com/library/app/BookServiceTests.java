@@ -1,6 +1,7 @@
 package com.library.app;
 
 import com.library.app.DTOs.Books.NewBookDTO;
+import com.library.app.DTOs.Books.UpdateBookDTO;
 import com.library.app.Enums.Books.BookStatus;
 import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
@@ -42,13 +43,13 @@ public class BookServiceTests {
     @Test
     void updateBookTest() {
         Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
-        NewBookDTO newBookDTO = new NewBookDTO("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+        UpdateBookDTO updateBookDTO = new UpdateBookDTO("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
 
         when(booksRepo.findById(any(BigInteger.class))).thenReturn(Optional.of(book));
         when(booksRepo.save(any(Book.class))).thenReturn(book);
 
         assertDoesNotThrow(() -> {
-            bookService.updateBook(BigInteger.valueOf(2455), newBookDTO);
+            bookService.updateBook(BigInteger.valueOf(2455), updateBookDTO);
         });
     }
 

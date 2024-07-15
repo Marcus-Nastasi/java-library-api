@@ -47,6 +47,17 @@ public class Book {
         this.dateOfPublish = dateOfPublish;
     }
 
+    public Book(String author, String name, double price, int quantity, BookStatus status, BookType type, String edition, LocalDate dateOfPublish) {
+        this.author = author;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.status = status;
+        this.type = type;
+        this.edition = edition;
+        this.dateOfPublish = dateOfPublish;
+    }
+
     public BigInteger getId() {
         return id;
     }
