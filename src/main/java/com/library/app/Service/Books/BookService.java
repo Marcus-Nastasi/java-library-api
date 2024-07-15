@@ -30,9 +30,7 @@ public class BookService {
     public Book addNewBook(NewBookDTO data) {
         String imgUrl = null;
 
-        if (data.image() == null) return null;
-
-        imgUrl = this.uploadImage(data.image());
+        if (data.image() != null) imgUrl = this.uploadImage(data.image());
 
         Book b = new Book(data.author(), data.name(), data.price(), data.quantity(), imgUrl, data.status(), data.type(), data.edition(), data.dateOfPublish());
 

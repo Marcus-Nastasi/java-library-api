@@ -43,8 +43,8 @@ public class BookController {
         return ResponseEntity.ok(booksRepo.findById(id).orElseThrow());
     }
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<Book> add(@RequestParam("author") String author,
+    @PostMapping(value = "/new")
+    public ResponseEntity<Book> register(@RequestParam("author") String author,
                                     @RequestParam("name") String name,
                                     @RequestParam("price") double price,
                                     @RequestParam("quantity") int quantity,
@@ -53,6 +53,7 @@ public class BookController {
                                     @RequestParam("edition") String edition,
                                     @RequestParam("dateOfPublish") LocalDate dateOfPublish,
                                     @RequestParam("image") MultipartFile image) {
+
         NewBookDTO data = new NewBookDTO(author, name, price, quantity, status, type, edition, dateOfPublish, image);
         Book b = bookService.addNewBook(data);
 
