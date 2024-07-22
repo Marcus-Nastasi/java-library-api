@@ -1,6 +1,7 @@
 package com.library.app.Infra.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,10 @@ public class SecurityConfig extends DelegatingWebMvcConfiguration {
 
     @Autowired
     private TokenFilter tokenFilter;
+    @Value("${spring.ip.frontend.url}")
+    private String frontendIpUrl;
+    @Value("${spring.local.frontend.url}")
+    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,7 +47,7 @@ public class SecurityConfig extends DelegatingWebMvcConfiguration {
             .allowCredentials(true)
             .allowedHeaders("Authorization", "Content-Type")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
-            .allowedOrigins("http://192.168.0.76:3030");
+            .allowedOrigins(frontendIpUrl, frontendUrl);
     }
 }
 

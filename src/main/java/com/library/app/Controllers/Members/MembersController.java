@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000, http://192.168.0.76:3000")
 @RequestMapping(value = "/api/members")
 public class MembersController {
 

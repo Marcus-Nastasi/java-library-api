@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000, http://192.168.0.76:3000")
 @RequestMapping(value = "/api/librarian")
 public class LibrarianController {
 
@@ -45,9 +46,13 @@ public class LibrarianController {
     public ResponseEntity<String> register(@RequestBody @Valid AddLibrarianDTO data) {
         Librarian l = librarianService.addNewLibrarian(data);
 
-        if (l == null) return ResponseEntity.status(HttpStatus.CONFLICT)
-            .header("Content-Type", "application/json")
-                .body(gson.toJson("{\"data\": [\"error\": \"librarian already registered\"]}"));
+        if (l == null) {
+            Map<String, Object> response = Map.of("data", List.of(Map.of("error", "librarian already registered")));
+
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .header("Content-Type", "application/json")
+                    .body(gson.toJson(response));
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(l));
     }
