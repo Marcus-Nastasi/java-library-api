@@ -59,7 +59,6 @@ public class BookController {
         Book b = bookService.addNewBook(data);
 
         if (b == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
         return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
 

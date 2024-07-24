@@ -39,17 +39,17 @@ public class AuthController {
         var auth = authenticationManager.authenticate(usernamePass);
         UserDetails u = librarianRepo.findByCpf(data.cpf());
 
-        String passwordOrCpfWrong = gson.toJson("{\"data\": [ \"error\": \"cpf or password wrong\" ]}");
-
         if (passwordEncoder.matches(data.password(), u.getPassword())) {
             Map<String, Object> resp = Map.of("data", List.of(Map.of("token", tokenService.generate(u.getUsername()), "cpf", u.getUsername())));
             return ResponseEntity
-                    .accepted()
-                        .header("Content-Type", "application/json")
-                            .body(gson.toJson(resp));
+                .accepted()
+                    .header("Content-Type", "application/json")
+                        .body(gson.toJson(resp));
         }
 
-        return ResponseEntity.badRequest().body(passwordOrCpfWrong);
+        Map<String, Object> errorMessage = Map.of("data", List.of(Map.of("error", "cpf or password wrong")));
+
+        return ResponseEntity.badRequest().body(gson.toJson(errorMessage));
     }
 }
 
