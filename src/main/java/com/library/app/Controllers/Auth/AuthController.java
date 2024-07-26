@@ -6,7 +6,6 @@ import com.library.app.Repository.Librarian.LibrarianRepo;
 import com.library.app.Service.Auth.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,17 +38,13 @@ public class AuthController {
         var auth = authenticationManager.authenticate(usernamePass);
         UserDetails u = librarianRepo.findByCpf(data.cpf());
 
-        if (passwordEncoder.matches(data.password(), u.getPassword())) {
-            Map<String, Object> resp = Map.of("data", List.of(Map.of("token", tokenService.generate(u.getUsername()), "cpf", u.getUsername())));
-            return ResponseEntity
-                .accepted()
-                    .header("Content-Type", "application/json")
-                        .body(gson.toJson(resp));
-        }
+        if (passwordEncoder.matches(data.password(), u.getPassword())) return ResponseEntity
+            .accepted()
+                .header("Content-Type", "application/json")
+                    .body(gson.toJson(Map.of("data", List.of(Map.of("token", tokenService.generate(u.getUsername()), "cpf", u.getUsername())))));
 
-        Map<String, Object> errorMessage = Map.of("data", List.of(Map.of("error", "cpf or password wrong")));
 
-        return ResponseEntity.badRequest().body(gson.toJson(errorMessage));
+        return ResponseEntity.badRequest().body(gson.toJson(Map.of("data", List.of(Map.of("error", "cpf or password wrong")))));
     }
 }
 
