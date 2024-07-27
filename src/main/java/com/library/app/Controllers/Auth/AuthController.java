@@ -43,7 +43,6 @@ public class AuthController {
                 .header("Content-Type", "application/json")
                     .body(gson.toJson(Map.of("data", List.of(Map.of("token", tokenService.generate(u.getUsername()), "cpf", u.getUsername())))));
 
-
         return ResponseEntity.badRequest().body(gson.toJson(Map.of("data", List.of(Map.of("error", "cpf or password wrong")))));
     }
 }
