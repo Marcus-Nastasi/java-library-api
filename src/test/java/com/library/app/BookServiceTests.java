@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,6 +69,32 @@ public class BookServiceTests {
         assertNull(bookService.deleteBook(BigInteger.valueOf(2501)));
 
         verify(booksRepo, times(2)).deleteById(BigInteger.valueOf(2500));
+    }
+
+    @Test
+    void searchByNameTest() {
+        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+
+        when(booksRepo.searchBooksByName(any(String.class))).thenReturn(List.of(book));
+
+        assertDoesNotThrow(() -> {
+            bookService.searchByName("Name test");
+        });
+
+        assertEquals(List.of(book), bookService.searchByName("name"));
+    }
+
+    @Test
+    void searchByAuthorTest() {
+        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+
+        when(booksRepo.findBooksByAuthor(any(String.class))).thenReturn(List.of(book));
+
+        assertDoesNotThrow(() -> {
+            bookService.searchByAuthor("Name test");
+        });
+
+        assertEquals(List.of(book), bookService.searchByAuthor("name"));
     }
 }
 
