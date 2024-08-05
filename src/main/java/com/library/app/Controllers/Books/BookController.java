@@ -2,6 +2,7 @@ package com.library.app.Controllers.Books;
 
 import com.google.gson.Gson;
 import com.library.app.DTOs.Books.NewBookDTO;
+import com.library.app.DTOs.Books.SearchAuthorDTO;
 import com.library.app.DTOs.Books.SearchNameDTO;
 import com.library.app.DTOs.Books.UpdateBookDTO;
 import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
@@ -48,6 +49,13 @@ public class BookController {
     @GetMapping(value = "/search/name")
     public ResponseEntity<List<Book>> searchByName(@RequestBody @Valid SearchNameDTO data) {
         List<Book> books = bookService.searchByName(data.name());
+        if (books.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping(value = "/search/author")
+    public ResponseEntity<List<Book>> searchByAuthor(@RequestBody @Valid SearchAuthorDTO data) {
+        List<Book> books = bookService.searchByAuthor(data.author());
         if (books.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(books);
     }

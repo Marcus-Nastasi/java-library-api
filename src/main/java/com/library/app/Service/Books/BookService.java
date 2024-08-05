@@ -66,6 +66,10 @@ public class BookService {
     public List<Book> searchByName(String name) {
         return this.booksRepo.searchBooksByName(name);
     }
+
+    public List<Book> searchByAuthor(String author) {
+        return booksRepo.findBooksByAuthor(author);
+    }
 }
 
 

@@ -13,11 +13,8 @@ import java.util.List;
 @Repository
 public interface BooksRepo extends JpaRepository<Book, BigInteger> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM books WHERE(author=?1);")
+    @Query(nativeQuery = true, value = "SELECT * FROM books WHERE LOWER(author) LIKE LOWER(CONCAT(?1, '%'));")
     List<Book> findBooksByAuthor(String author);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM books WHERE(name=?1);")
-    List<Book> findBooksByName(String name);
 
     @Query(nativeQuery = true, value = "SELECT * FROM books WHERE(type=?1);")
     List<Book> findBooksByType(BookType type);
