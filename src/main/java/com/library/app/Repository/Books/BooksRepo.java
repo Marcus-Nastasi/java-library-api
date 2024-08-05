@@ -24,9 +24,9 @@ public interface BooksRepo extends JpaRepository<Book, BigInteger> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM books WHERE(status=?1);")
     List<Book> findBooksByStatus(BookStatus status);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM books WHERE LOWER(name) LIKE LOWER(CONCAT(?1, '%'));")
+    List<Book> searchBooksByName(String name);
 }
-
-
-
 
 

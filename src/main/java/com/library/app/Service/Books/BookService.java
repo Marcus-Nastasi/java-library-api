@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -60,6 +61,10 @@ public class BookService {
         if (booksRepo.findById(id).isEmpty()) return null;
         booksRepo.deleteById(id);
         return "ok";
+    }
+
+    public List<Book> searchByName(String name) {
+        return this.booksRepo.searchBooksByName(name);
     }
 }
 

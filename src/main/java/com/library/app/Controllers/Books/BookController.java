@@ -2,6 +2,7 @@ package com.library.app.Controllers.Books;
 
 import com.google.gson.Gson;
 import com.library.app.DTOs.Books.NewBookDTO;
+import com.library.app.DTOs.Books.SearchNameDTO;
 import com.library.app.DTOs.Books.UpdateBookDTO;
 import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
 import com.library.app.Enums.Books.BookStatus;
@@ -44,7 +45,14 @@ public class BookController {
         return ResponseEntity.ok(booksRepo.findById(id).orElseThrow());
     }
 
-    @PostMapping(value = "/new")
+    @GetMapping(value = "/search/name")
+    public ResponseEntity<List<Book>> searchByName(@RequestBody @Valid SearchNameDTO data) {
+        List<Book> books = bookService.searchByName(data.name());
+        if (books.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(books);
+    }
+
+    @PostMapping(value = "/register")
     public ResponseEntity<Book> register(@RequestParam("author") String author,
                                     @RequestParam("name") String name,
                                     @RequestParam("price") double price,
@@ -76,8 +84,5 @@ public class BookController {
         return ResponseEntity.accepted().build();
     }
 }
-
-
-
 
 
