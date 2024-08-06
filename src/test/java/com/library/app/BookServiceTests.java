@@ -82,6 +82,26 @@ public class BookServiceTests {
         });
         assertEquals(List.of(book), bookService.searchByAuthor("name"));
     }
+
+    @Test
+    void searchByType() {
+        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+        when(booksRepo.findBooksByType(any(String.class))).thenReturn(List.of(book));
+        assertDoesNotThrow(() -> {
+            bookService.searchByType(BookType.REGULAR);
+        });
+        assertEquals(List.of(book), bookService.searchByType(BookType.STUDY));
+    }
+
+    @Test
+    void searchByStatus() {
+        Book book = new Book("Author", "Name", 12.99, 1, BookStatus.STOCK, BookType.REGULAR, "unique", LocalDate.of(2024, 7, 15));
+        when(booksRepo.findBooksByStatus(any(String.class))).thenReturn(List.of(book));
+        assertDoesNotThrow(() -> {
+            bookService.searchByStatus(BookStatus.STOCK);
+        });
+        assertEquals(List.of(book), bookService.searchByStatus(BookStatus.AVAILABLE));
+    }
 }
 
 

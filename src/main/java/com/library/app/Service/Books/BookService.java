@@ -82,9 +82,9 @@ public class BookService {
     }
 
     public List<Book> searchByStatus(BookStatus status) {
-        if (status.equals(BookStatus.STOCK)) return booksRepo.findBooksByType("0");
-        if (status.equals(BookStatus.AVAILABLE)) return booksRepo.findBooksByType("1");
-        if (status.equals(BookStatus.UNAVAILABLE)) return booksRepo.findBooksByType("2");
+        if (status.equals(BookStatus.STOCK)) return booksRepo.findBooksByStatus("0");
+        if (status.equals(BookStatus.AVAILABLE)) return booksRepo.findBooksByStatus("1");
+        if (status.equals(BookStatus.UNAVAILABLE)) return booksRepo.findBooksByStatus("2");
         return null;
     }
 }
