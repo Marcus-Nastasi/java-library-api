@@ -1,7 +1,5 @@
 package com.library.app.Repository.Books;
 
-import com.library.app.Enums.Books.BookStatus;
-import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

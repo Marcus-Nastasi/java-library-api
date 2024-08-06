@@ -11,19 +11,15 @@ import com.library.app.Util.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class BookService {
 
     // to-do: create books filters (already on repo)
+    // to-do: add description column
 
     @Autowired
     private BooksRepo booksRepo;

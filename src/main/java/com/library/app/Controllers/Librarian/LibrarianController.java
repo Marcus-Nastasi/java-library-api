@@ -46,10 +46,9 @@ public class LibrarianController {
     public ResponseEntity<String> register(@RequestBody @Valid AddLibrarianDTO data) {
         Librarian l = librarianService.addNewLibrarian(data);
         if (l == null) {
-            Map<String, Object> response = Map.of("data", List.of(Map.of("error", "librarian already registered")));
             return ResponseEntity.status(HttpStatus.CONFLICT)
                 .header("Content-Type", "application/json")
-                    .body(gson.toJson(response));
+                    .body(gson.toJson(Map.of("data", List.of(Map.of("error", "librarian already registered")))));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(l));
     }
