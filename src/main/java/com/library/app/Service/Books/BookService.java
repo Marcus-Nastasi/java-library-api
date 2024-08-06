@@ -3,6 +3,8 @@ package com.library.app.Service.Books;
 import com.amazonaws.services.s3.AmazonS3;
 import com.library.app.DTOs.Books.NewBookDTO;
 import com.library.app.DTOs.Books.UpdateBookDTO;
+import com.library.app.Enums.Books.BookStatus;
+import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
 import com.library.app.Repository.Books.BooksRepo;
 import com.library.app.Util.File;
@@ -64,11 +66,26 @@ public class BookService {
     }
 
     public List<Book> searchByName(String name) {
-        return this.booksRepo.searchBooksByName(name);
+        return this.booksRepo.findBooksByName(name);
     }
 
     public List<Book> searchByAuthor(String author) {
         return booksRepo.findBooksByAuthor(author);
+    }
+
+    public List<Book> searchByType(BookType type) {
+        if (type.equals(BookType.REGULAR)) return booksRepo.findBooksByType("0");
+        if (type.equals(BookType.STUDY)) return booksRepo.findBooksByType("1");
+        if (type.equals(BookType.JOURNAL)) return booksRepo.findBooksByType("2");
+        if (type.equals(BookType.MAGAZINE)) return booksRepo.findBooksByType("3");
+        return null;
+    }
+
+    public List<Book> searchByStatus(BookStatus status) {
+        if (status.equals(BookStatus.STOCK)) return booksRepo.findBooksByType("0");
+        if (status.equals(BookStatus.AVAILABLE)) return booksRepo.findBooksByType("1");
+        if (status.equals(BookStatus.UNAVAILABLE)) return booksRepo.findBooksByType("2");
+        return null;
     }
 }
 

@@ -1,11 +1,7 @@
 package com.library.app.Controllers.Books;
 
 import com.google.gson.Gson;
-import com.library.app.DTOs.Books.NewBookDTO;
-import com.library.app.DTOs.Books.SearchAuthorDTO;
-import com.library.app.DTOs.Books.SearchNameDTO;
-import com.library.app.DTOs.Books.UpdateBookDTO;
-import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
+import com.library.app.DTOs.Books.*;
 import com.library.app.Enums.Books.BookStatus;
 import com.library.app.Enums.Books.BookType;
 import com.library.app.Models.Books.Book;
@@ -56,6 +52,22 @@ public class BookController {
     @GetMapping(value = "/search/author")
     public ResponseEntity<List<Book>> searchByAuthor(@RequestBody @Valid SearchAuthorDTO data) {
         List<Book> books = bookService.searchByAuthor(data.author());
+        if (books.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping(value = "/search/type")
+    public ResponseEntity<List<Book>> searchByType(@RequestBody @Valid SearchTypeDTO data) {
+        BookType type = BookType.valueOf(data.type());
+        List<Book> books = bookService.searchByType(type);
+        if (books.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping(value = "/search/status")
+    public ResponseEntity<List<Book>> searchByStatus(@RequestBody @Valid SearchStatusDTO data) {
+        BookStatus status = BookStatus.valueOf(data.status());
+        List<Book> books = bookService.searchByStatus(status);
         if (books.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(books);
     }
