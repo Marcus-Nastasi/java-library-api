@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface BooksRepo extends JpaRepository<Book, BigInteger> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM books WHERE LOWER(name) LIKE LOWER(CONCAT(?1, '%'));")
+    @Query(nativeQuery = true, value = "SELECT * FROM books WHERE LOWER(name) LIKE LOWER(CONCAT('%', CONCAT(?1, '%')));")
     List<Book> findBooksByName(String name);
 
     @Query(nativeQuery = true, value = "SELECT * FROM books WHERE LOWER(author) LIKE LOWER(CONCAT(?1, '%'));")

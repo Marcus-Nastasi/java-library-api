@@ -31,11 +31,11 @@ public class Member {
 
     public Member() {}
 
-    public Member(String name, String cpf, MemberType type, int booksIssued, int booksLimit, String phone) {
+    public Member(String name, String cpf, MemberType type, LocalDate dateOfMembership, int booksIssued, int booksLimit, String phone) {
         this.name = name;
         this.cpf = cpf;
         this.type = type;
-        this.dateOfMembership = LocalDate.now();
+        this.dateOfMembership = dateOfMembership;
         this.booksIssued = booksIssued;
         this.booksLimit = booksLimit;
         this.phone = phone;
@@ -77,10 +77,6 @@ public class Member {
         return dateOfMembership;
     }
 
-    public void setDateOfMembership(LocalDate dateOfMembership) {
-        this.dateOfMembership = dateOfMembership;
-    }
-
     public int getBooksIssued() {
         return booksIssued;
     }
@@ -105,7 +101,5 @@ public class Member {
         this.phone = phone;
     }
 }
-
-
 
 

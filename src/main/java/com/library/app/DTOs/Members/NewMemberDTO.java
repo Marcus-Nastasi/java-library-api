@@ -6,4 +6,3 @@ public record NewMemberDTO(String name, String cpf, MemberType type, String phon
 }
 
 
-

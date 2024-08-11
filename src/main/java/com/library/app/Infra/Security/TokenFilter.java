@@ -26,16 +26,12 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.getToken(request);
-
         if (token != null) {
             String cpf = tokenService.validate(token);
             UserDetails u = librarianRepo.findByCpf(cpf);
-
             var auth = new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities());
-
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
-
         filterChain.doFilter(request, response);
     }
 
@@ -45,6 +41,5 @@ public class TokenFilter extends OncePerRequestFilter {
         return header.replace("Bearer ", "");
     }
 }
-
 
 

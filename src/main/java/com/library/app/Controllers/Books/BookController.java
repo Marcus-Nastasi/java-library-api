@@ -42,21 +42,21 @@ public class BookController {
         return ResponseEntity.ok(booksRepo.findById(id).orElseThrow());
     }
 
-    @GetMapping(value = "/search/name")
+    @PostMapping(value = "/search/name")
     public ResponseEntity<List<Book>> searchByName(@RequestBody @Valid SearchNameDTO data) {
         List<Book> books = bookService.searchByName(data.name());
         if (books.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping(value = "/search/author")
+    @PostMapping(value = "/search/author")
     public ResponseEntity<List<Book>> searchByAuthor(@RequestBody @Valid SearchAuthorDTO data) {
         List<Book> books = bookService.searchByAuthor(data.author());
         if (books.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping(value = "/search/type")
+    @PostMapping(value = "/search/type")
     public ResponseEntity<List<Book>> searchByType(@RequestBody @Valid SearchTypeDTO data) {
         BookType type = BookType.valueOf(data.type());
         List<Book> books = bookService.searchByType(type);
@@ -64,7 +64,7 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping(value = "/search/status")
+    @PostMapping(value = "/search/status")
     public ResponseEntity<List<Book>> searchByStatus(@RequestBody @Valid SearchStatusDTO data) {
         BookStatus status = BookStatus.valueOf(data.status());
         List<Book> books = bookService.searchByStatus(status);

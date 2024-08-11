@@ -2,6 +2,7 @@ package com.library.app.Controllers.Members;
 
 import com.google.gson.Gson;
 import com.library.app.DTOs.Members.NewMemberDTO;
+import com.library.app.DTOs.Members.SearchMemberDTO;
 import com.library.app.Models.Members.Member;
 import com.library.app.Repository.Members.MembersRepo;
 import com.library.app.Service.Members.MembersService;
@@ -37,6 +38,13 @@ public class MembersController {
     public ResponseEntity<Member> getSingle(@PathVariable BigInteger id) {
         return (membersRepo.findById(id).isEmpty())
             ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.ok(membersRepo.findById(id).get());
+    }
+
+    @PostMapping(value = "/search")
+    public ResponseEntity<List<Member>> search(@RequestBody @Valid SearchMemberDTO data) {
+        List<Member> memberList = membersService.searchMember(data.data());
+        if (memberList.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(memberList);
     }
 
     @PostMapping(value = "/register")

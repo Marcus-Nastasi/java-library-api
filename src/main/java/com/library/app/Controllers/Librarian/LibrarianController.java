@@ -2,6 +2,7 @@ package com.library.app.Controllers.Librarian;
 
 import com.google.gson.Gson;
 import com.library.app.DTOs.Librarian.AddLibrarianDTO;
+import com.library.app.DTOs.Librarian.FindByCpfDTO;
 import com.library.app.DTOs.Librarian.UpdLibrarianDTO;
 import com.library.app.Models.Librarian.Librarian;
 import com.library.app.Repository.Librarian.LibrarianRepo;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,13 @@ public class LibrarianController {
     public ResponseEntity<Librarian> getSingle(@PathVariable String id) {
         if (librarianRepo.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(librarianRepo.findById(id).get());
+    }
+
+    @PostMapping(value = "/get/cpf")
+    public ResponseEntity<UserDetails> getByCpf(@RequestBody @Valid FindByCpfDTO data) {
+        UserDetails user = librarianRepo.findByCpf(data.cpf());
+        if (user == null) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping(value = "/register")
