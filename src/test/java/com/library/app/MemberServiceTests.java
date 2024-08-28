@@ -30,19 +30,15 @@ public class MemberServiceTests {
         Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
         NewMemberDTO newMemberDTO = new NewMemberDTO("Name", "CPF", MemberType.REGULAR, "123213231", 2, 2);
         NewMemberDTO newMemberDTONull = new NewMemberDTO("Name", "CPFNull", MemberType.REGULAR, "21323131321", 2, 2);
-
         when(membersRepo.findByCpf(newMemberDTO.cpf())).thenReturn(null);
         when(membersRepo.findByCpf(newMemberDTONull.cpf())).thenReturn(m);
         when(membersRepo.save(any(Member.class))).thenReturn(m);
-
         assertDoesNotThrow(() -> {
             membersService.addNewMember(newMemberDTO);
         });
-
         assertEquals(m.getCpf(), membersService.addNewMember(newMemberDTO).getCpf());
         assertNotNull(membersService.addNewMember(newMemberDTO));
         assertNull(membersService.addNewMember(newMemberDTONull));
-
         verify(membersRepo, times(3)).save(any(Member.class));
     }
 
@@ -50,39 +46,29 @@ public class MemberServiceTests {
     void updateMemberTest() {
         Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
         NewMemberDTO newMemberDTO = new NewMemberDTO("Name", "CPF", MemberType.REGULAR, "21323131321", 2, 2);
-
         when(membersRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(m));
         when(membersRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
         when(membersRepo.save(any(Member.class))).thenReturn(m);
-
         assertDoesNotThrow(() -> {
             membersService.updateMember(BigInteger.valueOf(2500), newMemberDTO);
         });
-
         assertNotNull(membersService.updateMember(BigInteger.valueOf(2500), newMemberDTO));
         assertNull(membersService.updateMember(BigInteger.valueOf(2501), newMemberDTO));
         assertEquals(m, membersService.updateMember(BigInteger.valueOf(2500), newMemberDTO));
-
         verify(membersRepo, times(3)).save(m);
     }
 
     @Test
     void deleteMemberTest() {
         Member m = new Member("Name", "CPF", MemberType.REGULAR, 2, 2, "123213231");
-
         when(membersRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(m));
         when(membersRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
-
         assertDoesNotThrow(() -> {
             membersService.deleteMember(BigInteger.valueOf(2500));
         });
-
-        assertEquals("ok", membersService.deleteMember(BigInteger.valueOf(2500)));
-        assertNull(membersService.deleteMember(BigInteger.valueOf(2501)));
-
+        assertTrue(membersService.deleteMember(BigInteger.valueOf(2500)));
+        assertFalse(membersService.deleteMember(BigInteger.valueOf(2501)));
         verify(membersRepo, times(2)).deleteById(any(BigInteger.class));
     }
 }
-
-
 

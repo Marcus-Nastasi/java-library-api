@@ -58,8 +58,8 @@ public class BookServiceTests {
         assertDoesNotThrow(() -> {
             bookService.deleteBook(BigInteger.valueOf(2500));
         });
-        assertEquals("ok", bookService.deleteBook(BigInteger.valueOf(2500)));
-        assertNull(bookService.deleteBook(BigInteger.valueOf(2501)));
+        assertTrue(bookService.deleteBook(BigInteger.valueOf(2500)));
+        assertFalse(bookService.deleteBook(BigInteger.valueOf(2501)));
         verify(booksRepo, times(2)).deleteById(BigInteger.valueOf(2500));
     }
 
@@ -103,6 +103,4 @@ public class BookServiceTests {
         assertEquals(List.of(book), bookService.searchByStatus(BookStatus.AVAILABLE));
     }
 }
-
-
 

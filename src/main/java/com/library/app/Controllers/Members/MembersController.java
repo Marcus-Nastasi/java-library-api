@@ -31,13 +31,15 @@ public class MembersController {
     @GetMapping(value = "/get")
     public ResponseEntity<List<Member>> getAll() {
         return (membersRepo.findAll().isEmpty())
-            ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.ok(membersRepo.findAll());
+            ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+            : ResponseEntity.ok(membersRepo.findAll());
     }
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<Member> getSingle(@PathVariable BigInteger id) {
         return (membersRepo.findById(id).isEmpty())
-            ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.ok(membersRepo.findById(id).get());
+            ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+            : ResponseEntity.ok(membersRepo.findById(id).get());
     }
 
     @PostMapping(value = "/search")
@@ -52,7 +54,7 @@ public class MembersController {
         Member m = membersService.addNewMember(data);
         if (m == null) return ResponseEntity.status(HttpStatus.CONFLICT)
             .header("Content-Type", "application/json")
-                .body(gson.toJson(Map.of("data", List.of(Map.of("error", "member already registered")))));
+            .body(gson.toJson(Map.of("data", List.of(Map.of("error", "member already registered")))));
         return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(Map.of("data", List.of("member", m))));
     }
 
@@ -65,10 +67,10 @@ public class MembersController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> del(@PathVariable BigInteger id) {
-        String deletion = membersService.deleteMember(id);
-        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        boolean deletion = membersService.deleteMember(id);
+        if (!deletion) return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .header("Content-Type", "application/json")
-                .body(gson.toJson(Map.of("error", "member not found")));
+            .body(gson.toJson(Map.of("error", "member not found")));
         return ResponseEntity.accepted().build();
     }
 }

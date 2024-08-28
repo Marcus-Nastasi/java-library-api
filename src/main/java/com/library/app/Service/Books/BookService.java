@@ -34,7 +34,15 @@ public class BookService {
         String imgUrl = null;
         if (data.image() != null) imgUrl = this.file.uploadImage(data.image());
         Book b = new Book(
-            data.author(), data.name(), data.price(), data.quantity(), imgUrl, data.status(), data.type(), data.edition(), data.dateOfPublish()
+            data.author(),
+            data.name(),
+            data.price(),
+            data.quantity(),
+            imgUrl,
+            data.status(),
+            data.type(),
+            data.edition(),
+            data.dateOfPublish()
         );
         booksRepo.save(b);
         return b;
@@ -55,10 +63,10 @@ public class BookService {
         return b;
     }
 
-    public String deleteBook(BigInteger id) {
-        if (booksRepo.findById(id).isEmpty()) return null;
+    public boolean deleteBook(BigInteger id) {
+        if (booksRepo.findById(id).isEmpty()) return false;
         booksRepo.deleteById(id);
-        return "ok";
+        return true;
     }
 
     public List<Book> searchByName(String name) {

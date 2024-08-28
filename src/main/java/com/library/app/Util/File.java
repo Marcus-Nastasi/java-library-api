@@ -25,7 +25,9 @@ public class File {
             java.io.File file = this.convertMultipartToFile(multipartFile);
             s3Client.putObject(bucketName, imgName, file);
             file.delete();
-            return s3Client.getUrl(bucketName, imgName).toString();
+            return s3Client
+                .getUrl(bucketName, imgName)
+                .toString();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

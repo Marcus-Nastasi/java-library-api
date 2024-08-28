@@ -1,5 +1,6 @@
 package com.library.app.Models.Rents;
 
+import com.library.app.Models.Members.Member;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
@@ -22,15 +23,27 @@ public class Rent {
     private String librarian_id;
     @Column
     private BigInteger member_id;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     public Rent() {}
 
-    public Rent(BigInteger book_id, String librarian_id, BigInteger member_id) {
+    public Rent(BigInteger book_id, String librarian_id, BigInteger member_id, Member member) {
         this.emit_date = LocalDate.now();
         this.return_date = emit_date.plusDays(7);
         this.book_id = book_id;
         this.librarian_id = librarian_id;
         this.member_id = member_id;
+        this.member = member;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public BigInteger getId() {

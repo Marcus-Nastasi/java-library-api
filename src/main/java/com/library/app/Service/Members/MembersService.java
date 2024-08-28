@@ -18,7 +18,15 @@ public class MembersService {
 
     public Member addNewMember(NewMemberDTO data) {
         if (membersRepo.findByCpf(data.cpf()) != null) return null;
-        Member m = new Member(data.name(), data.cpf(), data.type(), LocalDate.now(), data.booksIssued(), data.booksLimit(), data.phone());
+        Member m = new Member(
+            data.name(),
+            data.cpf(),
+            data.type(),
+            LocalDate.now(),
+            data.booksIssued(),
+            data.booksLimit(),
+            data.phone()
+        );
         membersRepo.save(m);
         return m;
     }
@@ -36,15 +44,14 @@ public class MembersService {
         return m;
     }
 
-    public String deleteMember(BigInteger id) {
-        if (membersRepo.findById(id).isEmpty()) return null;
+    public boolean deleteMember(BigInteger id) {
+        if (membersRepo.findById(id).isEmpty()) return false;
         membersRepo.deleteById(id);
-        return "ok";
+        return true;
     }
 
     public List<Member> searchMember(String data) {
         return membersRepo.searchMember(data);
     }
 }
-
 

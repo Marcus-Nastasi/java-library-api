@@ -20,7 +20,12 @@ public class TokenService {
     public String generate(String cpf) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.create().withIssuer("library-api").withSubject(cpf).withExpiresAt(exp()).sign(algorithm);
+            return JWT
+                .create()
+                .withIssuer("library-api")
+                .withSubject(cpf)
+                .withExpiresAt(exp())
+                .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -29,14 +34,22 @@ public class TokenService {
     public String validate(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm).withIssuer("library-api").build().verify(token).getSubject();
+            return JWT
+                .require(algorithm)
+                .withIssuer("library-api")
+                .build()
+                .verify(token)
+                .getSubject();
         } catch (JWTVerificationException e) {
             return "";
         }
     }
 
     private Instant exp() {
-        return LocalDateTime.now().plusHours(12).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime
+            .now()
+            .plusHours(12)
+            .toInstant(ZoneOffset.of("-03:00"));
     }
 }
 

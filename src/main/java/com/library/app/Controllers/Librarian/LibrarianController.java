@@ -54,16 +54,18 @@ public class LibrarianController {
     @PostMapping(value = "/register")
     public ResponseEntity<String> register(@RequestBody @Valid AddLibrarianDTO data) {
         Librarian l = librarianService.addNewLibrarian(data);
-        if (l == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                .header("Content-Type", "application/json")
-                    .body(gson.toJson(Map.of("data", List.of(Map.of("error", "librarian already registered")))));
-        }
+        if (l == null) return ResponseEntity.status(HttpStatus.CONFLICT)
+            .header("Content-Type", "application/json")
+            .body(gson.toJson(Map.of("data", List.of(Map.of("error", "librarian already registered")))));
         return ResponseEntity.status(HttpStatus.CREATED).body(gson.toJson(l));
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<Librarian> update(@RequestBody @Valid UpdLibrarianDTO data, @PathVariable String id, @RequestHeader Map<String, String> header) {
+    public ResponseEntity<Librarian> update(
+        @RequestBody @Valid UpdLibrarianDTO data,
+        @PathVariable String id,
+        @RequestHeader Map<String, String> header
+    ) {
         String token = header.get("authorization").replace("Bearer ", "");
         Librarian l = librarianService.updateLibrarian(data, id, token);
         if (l == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -72,11 +74,9 @@ public class LibrarianController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
-        String deletion = librarianService.deleteLibrarian(id);
-        if (deletion == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        boolean deletion = librarianService.deleteLibrarian(id);
+        if (!deletion) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
-
-
 

@@ -82,10 +82,8 @@ public class BookController {
                                     @RequestParam("edition") String edition,
                                     @RequestParam("dateOfPublish") LocalDate dateOfPublish,
                                     @RequestParam("image") MultipartFile image) {
-
         NewBookDTO data = new NewBookDTO(author, name, price, quantity, status, type, edition, dateOfPublish, image);
         Book b = bookService.addNewBook(data);
-
         if (b == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(b);
     }
@@ -99,10 +97,9 @@ public class BookController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable BigInteger id) {
-        String deletion = bookService.deleteBook(id);
-        if (deletion == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        boolean deletion = bookService.deleteBook(id);
+        if (!deletion) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.accepted().build();
     }
 }
-
 

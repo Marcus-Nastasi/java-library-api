@@ -28,9 +28,7 @@ public class RentsServiceTests {
     void addNewRentTest() {
         Rent r = new Rent(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
         NewRentDTO newRentDTO = new NewRentDTO(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
-
         when(rentsRepo.save(any(Rent.class))).thenReturn(r);
-
         assertDoesNotThrow(() -> {
             rentsService.addNewRent(newRentDTO);
         });
@@ -40,16 +38,13 @@ public class RentsServiceTests {
     void updateRentTest() {
         Rent r = new Rent(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
         NewRentDTO newRentDTO = new NewRentDTO(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
-
         when(rentsRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(r));
         when(rentsRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
         when(rentsRepo.save(any(Rent.class))).thenReturn(r);
-
         assertDoesNotThrow(() -> {
             rentsService.updateRent(BigInteger.valueOf(2500), newRentDTO);
             rentsService.updateRent(BigInteger.valueOf(2501), newRentDTO);
         });
-
         assertNotNull(rentsService.updateRent(BigInteger.valueOf(2500), newRentDTO));
         assertNull(rentsService.updateRent(BigInteger.valueOf(2501), newRentDTO));
     }
@@ -57,21 +52,15 @@ public class RentsServiceTests {
     @Test
     void deleteRentTest() {
         Rent r = new Rent(BigInteger.valueOf(1), "lib id", BigInteger.valueOf(2));
-
         when(rentsRepo.findById(BigInteger.valueOf(2500))).thenReturn(Optional.of(r));
         when(rentsRepo.findById(BigInteger.valueOf(2501))).thenReturn(Optional.empty());
-
         assertDoesNotThrow(() -> {
             rentsService.deleteRent(BigInteger.valueOf(2500));
             rentsService.deleteRent(BigInteger.valueOf(2501));
         });
-
-        assertNotNull(rentsService.deleteRent(BigInteger.valueOf(2500)));
-        assertNull(rentsService.deleteRent(BigInteger.valueOf(2501)));
-
+        assertTrue(rentsService.deleteRent(BigInteger.valueOf(2500)));
+        assertFalse(rentsService.deleteRent(BigInteger.valueOf(2501)));
         verify(rentsRepo, times(2)).deleteById(any(BigInteger.class));
     }
 }
-
-
 

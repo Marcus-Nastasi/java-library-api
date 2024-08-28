@@ -1,10 +1,12 @@
 package com.library.app.Models.Members;
 
 import com.library.app.Enums.Members.MemberType;
+import com.library.app.Models.Rents.Rent;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "members")
@@ -28,6 +30,8 @@ public class Member {
     private int booksLimit;
     @Column
     private String phone;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rent> rents;
 
     public Member() {}
 
@@ -39,6 +43,14 @@ public class Member {
         this.booksIssued = booksIssued;
         this.booksLimit = booksLimit;
         this.phone = phone;
+    }
+
+    public List<Rent> getRents() {
+        return rents;
+    }
+
+    public void setRents(List<Rent> rents) {
+        this.rents = rents;
     }
 
     public BigInteger getId() {

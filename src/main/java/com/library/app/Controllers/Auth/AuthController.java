@@ -37,18 +37,17 @@ public class AuthController {
         var usernamePass = new UsernamePasswordAuthenticationToken(data.cpf(), data.password());
         var auth = authenticationManager.authenticate(usernamePass);
         UserDetails u = librarianRepo.findByCpf(data.cpf());
-
         if (passwordEncoder.matches(data.password(), u.getPassword())) return ResponseEntity
             .accepted()
-                .header("Content-Type", "application/json")
-                    .body(gson.toJson(Map.of("data", List.of(Map.of("token", tokenService.generate(u.getUsername()), "cpf", u.getUsername())))));
-
-        return ResponseEntity.badRequest().body(gson.toJson(Map.of("data", List.of(Map.of("error", "cpf or password wrong")))));
+            .header("Content-Type", "application/json")
+            .body(gson.toJson(
+                Map.of("data", List.of(Map.of("token", tokenService.generate(u.getUsername()), "cpf", u.getUsername())))
+            ));
+        return ResponseEntity
+            .badRequest()
+            .body(gson.toJson(
+                    Map.of("data", List.of(Map.of("error", "cpf or password wrong")))
+            ));
     }
 }
-
-
-
-
-
 

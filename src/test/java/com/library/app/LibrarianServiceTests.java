@@ -34,14 +34,11 @@ public class LibrarianServiceTests {
         Librarian librarian = new Librarian("name", "cpf", "password");
         AddLibrarianDTO addLibrarianDTO = new AddLibrarianDTO("name", "cpf", "password");
         AddLibrarianDTO addLibrarianDTONull = new AddLibrarianDTO("name", "cpfNull", "password");
-
         Mockito.when(librarianRepo.findByCpf(addLibrarianDTONull.cpf())).thenReturn(librarian);
         Mockito.when(librarianRepo.findByCpf(addLibrarianDTO.cpf())).thenReturn(null);
         Mockito.when(librarianRepo.save(Mockito.any(Librarian.class))).thenReturn(librarian);
-
         Assertions.assertNotNull(librarianService.addNewLibrarian(addLibrarianDTO));
         Assertions.assertNull(librarianService.addNewLibrarian(addLibrarianDTONull));
-
         Mockito.verify(librarianRepo, Mockito.times(1)).save(Mockito.any(Librarian.class));
     }
 
@@ -50,12 +47,10 @@ public class LibrarianServiceTests {
         Librarian librarian = new Librarian("name", "cpf", "password");
         UpdLibrarianDTO updLibrarianDTO = new UpdLibrarianDTO("new name", "new cpf", "password", "new pass");
         String tkn = "token";
-
         Mockito.when(librarianRepo.save(Mockito.any(Librarian.class))).thenReturn(librarian);
         Mockito.when(passwordEncoder.matches(updLibrarianDTO.oldPassword(), librarian.getPassword())).thenReturn(true);
         Mockito.when(tokenService.validate(tkn)).thenReturn(librarian.getCpf());
         Mockito.when(librarianRepo.findById(Mockito.any(String.class))).thenReturn(Optional.of(librarian));
-
         Assertions.assertDoesNotThrow(() -> {
             librarianService.updateLibrarian(updLibrarianDTO, "id", tkn);
         });
@@ -64,20 +59,12 @@ public class LibrarianServiceTests {
     @Test
     void deleteLibrarian() {
         Librarian librarian = new Librarian("name", "cpf", "password");
-
         Mockito.when(librarianRepo.findById("1")).thenReturn(Optional.of(librarian));
         Mockito.when(librarianRepo.findById("11")).thenReturn(Optional.empty());
-
-        String result = librarianService.deleteLibrarian("1");
-
-        Assertions.assertEquals("ok", result);
-        Assertions.assertNull(librarianService.deleteLibrarian("11"));
-
+        boolean result = librarianService.deleteLibrarian("1");
+        Assertions.assertTrue(result);
+        Assertions.assertFalse(librarianService.deleteLibrarian("11"));
         Mockito.verify(librarianRepo, Mockito.times(1)).deleteById("1");
     }
 }
-
-
-
-
 

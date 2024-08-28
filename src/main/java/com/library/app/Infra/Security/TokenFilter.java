@@ -24,7 +24,11 @@ public class TokenFilter extends OncePerRequestFilter {
     private LibrarianRepo librarianRepo;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain
+    ) throws ServletException, IOException {
         String token = this.getToken(request);
         if (token != null) {
             String cpf = tokenService.validate(token);
